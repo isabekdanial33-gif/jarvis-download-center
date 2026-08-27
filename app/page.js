@@ -1,16 +1,16 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { releases, latestAndroid, latestWindows, formatBytes, releaseDownloadUrl } from "../lib/releases.js";
+import { releases, latestAndroid, latestWindows, latestMacArmZip, latestMacIntelZip, formatBytes, releaseDownloadUrl } from "../lib/releases.js";
 
-const filters = [["all", "ALL BUILDS"], ["windows", "WINDOWS"], ["android", "ANDROID APK"]];
+const filters = [["all", "ALL BUILDS"], ["windows", "WINDOWS"], ["macos", "macOS"], ["android", "ANDROID APK"]];
 
 function DownloadIcon() {
   return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 5-5m-5 5-5-5M5 20h14" /></svg>;
 }
 
 function PlatformIcon({ platform }) {
-  return platform === "android" ? <span className="platformGlyph">A</span> : <span className="platformGlyph windowsGlyph">⊞</span>;
+  return platform === "android" ? <span className="platformGlyph">A</span> : platform === "macos" ? <span className="platformGlyph macGlyph">⌘</span> : <span className="platformGlyph windowsGlyph">⊞</span>;
 }
 
 function DownloadButton({ item, primary = false }) {
@@ -45,9 +45,9 @@ export default function Home() {
         <div className="heroCopy">
           <div className="overline">JARVIS / PERSONAL COMPUTER INTELLIGENCE</div>
           <h1>YOUR MACHINE.<br /><em>NOW INTELLIGENT.</em></h1>
-          <p>Voice-first AI control for Windows and Android. Talk, automate, build, navigate — with your models, your keys and your rules.</p>
-          <div className="heroActions"><DownloadButton item={latestWindows} primary /><DownloadButton item={latestAndroid} /></div>
-          <div className="heroMeta"><span>WINDOWS 10/11 · X64</span><span>ANDROID 8.0+</span><span>BRING YOUR OWN API</span></div>
+          <p>Voice-first AI control for Windows, macOS and Android. Talk, automate, build, navigate — with your models, your keys and your rules.</p>
+          <div className="heroActions"><DownloadButton item={latestWindows} primary /><DownloadButton item={latestMacArmZip} /><DownloadButton item={latestAndroid} /></div>
+          <div className="heroMeta"><span>WINDOWS 10/11 · X64</span><span>macOS · APPLE/INTEL</span><span>ANDROID 8.0+</span><span>BRING YOUR OWN API</span></div>
         </div>
         <div className="core" aria-label="JARVIS neural core illustration">
           <div className="coreLabel top">VOICE / SCREEN / ACTION</div>
@@ -69,6 +69,11 @@ export default function Home() {
             <div className="cardTop"><PlatformIcon platform="android" /><span>MOBILE RELEASE</span></div>
             <div><p className="platform">ANDROID APK</p><h3>JARVIS<br />MOBILE</h3><p className="description">The same command center interface with voice wake, volume-key launch and Accessibility control.</p></div>
             <div className="cardFooter"><div><b>{latestAndroid.version}</b><span>{formatBytes(latestAndroid.size)} · APK · ARM/X64</span></div><DownloadButton item={latestAndroid} /></div>
+          </article>
+          <article className="productCard macCard">
+            <div className="cardTop"><PlatformIcon platform="macos" /><span>macOS RELEASE</span></div>
+            <div><p className="platform">MAC DESKTOP</p><h3>JARVIS<br />FOR macOS</h3><p className="description">A real JARVIS Assistant.app inside ZIP, with native cursor and keyboard control, zsh tools, Keychain encryption, screen vision and global ⌘⇧J activation.</p></div>
+            <div className="cardFooter macDownloads"><div><b>{latestMacArmZip.version}</b><span>ZIP WITH .APP · CHOOSE YOUR CHIP</span></div><DownloadButton item={latestMacArmZip} /><DownloadButton item={latestMacIntelZip} /></div>
           </article>
           <article className="featureList">
             <p className="platform">WHAT'S INSIDE</p>
@@ -100,6 +105,8 @@ export default function Home() {
         <div className="installGrid">
           <article><span>WINDOWS</span><h3>01</h3><p>Download Setup, open it, complete installation, then enter your API key. Press <b>F10</b> or enable the “Jarvis” wake word.</p><aside>Smart App Control may block unsigned builds. Keep Defender enabled and review the SHA-256 before running.</aside></article>
           <article><span>ANDROID</span><h3>02</h3><p>Install the APK, allow restricted settings, then enable <b>JARVIS — phone control</b> in Accessibility.</p><aside>Enable microphone and notification access for background wake word. Hold Volume + and − together to launch.</aside></article>
+          <article className="macInstall"><span>macOS · .APP IN ZIP</span><h3>03</h3><p>Choose the ZIP for <b>Apple Silicon</b> (M1/M2/M3/M4/M5) or <b>Intel</b>, download and unpack it. Move <b>JARVIS Assistant.app</b> to Applications. In Finder, hold <b>Control</b> (or right-click) on the app, choose <b>Open</b>, then confirm Open.</p><aside>If macOS still blocks it: System Settings → Privacy &amp; Security → Security → <b>Open Anyway</b>. Under Privacy &amp; Security, allow JARVIS in <b>Accessibility</b>, <b>Screen &amp; System Audio Recording</b> and <b>Microphone</b>, then restart it. DMG builds remain available in All Versions.</aside><pre><code>{`xattr -dr com.apple.quarantine "/Applications/JARVIS Assistant.app"
+open -a "JARVIS Assistant"`}</code></pre><small>Run only after checking SHA-256 above. This removes quarantine only from JARVIS; never disable Gatekeeper globally.</small></article>
         </div>
       </section>
 
